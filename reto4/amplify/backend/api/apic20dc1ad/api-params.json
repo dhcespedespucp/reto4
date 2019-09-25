@@ -1,0 +1,42 @@
+{
+    "paths": [
+        {
+            "name": "/document",
+            "lambdaFunction": "reto41c526823",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            }
+        }
+    ],
+    "resourceName": "apic20dc1ad",
+    "apiName": "apic20dc1ad",
+    "functionArns": [
+        {
+            "lambdaFunction": "reto41c526823"
+        }
+    ],
+    "privacy": {
+        "auth": 1,
+        "unauth": 0,
+        "authRoleName": "reto4-dev-20190921163029-authRole",
+        "unAuthRoleName": "reto4-dev-20190921163029-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "reto41c526823",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ],
+    "uuid": "d60a7f14"
+}

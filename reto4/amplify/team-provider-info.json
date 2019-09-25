@@ -1,0 +1,19 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "reto4-dev-20190921163029-authRole",
+            "UnauthRoleArn": "arn:aws:iam::321531330041:role/reto4-dev-20190921163029-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::321531330041:role/reto4-dev-20190921163029-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "reto4-dev-20190921163029-deployment",
+            "UnauthRoleName": "reto4-dev-20190921163029-unauthRole",
+            "StackName": "reto4-dev-20190921163029",
+            "StackId": "arn:aws:cloudformation:us-east-1:321531330041:stack/reto4-dev-20190921163029/09718030-dcb7-11e9-b43c-0eedb7eead80"
+        },
+        "categories": {
+            "auth": {
+                "reto4d5feb25e": {}
+            }
+        }
+    }
+}

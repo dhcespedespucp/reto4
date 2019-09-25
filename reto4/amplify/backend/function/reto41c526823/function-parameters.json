@@ -1,0 +1,12 @@
+{
+    "permissions": {
+        "storage": {
+            "s38f236071": [
+                "create",
+                "read",
+                "update",
+                "delete"
+            ]
+        }
+    }
+}

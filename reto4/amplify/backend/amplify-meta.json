@@ -1,0 +1,127 @@
+{
+	"providers": {
+		"awscloudformation": {
+			"AuthRoleName": "reto4-dev-20190921163029-authRole",
+			"UnauthRoleArn": "arn:aws:iam::321531330041:role/reto4-dev-20190921163029-unauthRole",
+			"AuthRoleArn": "arn:aws:iam::321531330041:role/reto4-dev-20190921163029-authRole",
+			"Region": "us-east-1",
+			"DeploymentBucketName": "reto4-dev-20190921163029-deployment",
+			"UnauthRoleName": "reto4-dev-20190921163029-unauthRole",
+			"StackName": "reto4-dev-20190921163029",
+			"StackId": "arn:aws:cloudformation:us-east-1:321531330041:stack/reto4-dev-20190921163029/09718030-dcb7-11e9-b43c-0eedb7eead80"
+		}
+	},
+	"hosting": {
+		"S3AndCloudFront": {
+			"service": "S3AndCloudFront",
+			"providerPlugin": "awscloudformation",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/reto4-dev-20190921163029-deployment/amplify-cfn-templates/hosting/template.json",
+				"logicalId": "hostingS3AndCloudFront"
+			},
+			"lastPushTimeStamp": "2019-09-24T03:26:24.279Z",
+			"output": {
+				"S3BucketSecureURL": "https://reto4-20190921163645-hostingbucket-dev.s3.amazonaws.com",
+				"WebsiteURL": "http://reto4-20190921163645-hostingbucket-dev.s3-website-us-east-1.amazonaws.com",
+				"Region": "us-east-1",
+				"HostingBucketName": "reto4-20190921163645-hostingbucket-dev"
+			},
+			"lastPushDirHash": "ILdsTEMIeli51bpWHMRrV06ng6M="
+		}
+	},
+	"auth": {
+		"reto4d5feb25e": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [],
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/reto4-dev-20190921163029-deployment/amplify-cfn-templates/auth/reto4d5feb25e-cloudformation-template.yml",
+				"logicalId": "authreto4d5feb25e"
+			},
+			"lastPushTimeStamp": "2019-09-24T03:26:24.280Z",
+			"output": {
+				"AppClientSecret": "aociaq4p083bumgu0i0l8e10e3u67q9b24p5j4qcdjh1ohoqttd",
+				"UserPoolId": "us-east-1_1LgM0p9Ub",
+				"AppClientIDWeb": "9trknb3o9tu2drm8emnbblcrk",
+				"AppClientID": "6t45rh6he7jrsul8c40vd6ssb",
+				"IdentityPoolId": "us-east-1:9ca428c2-a142-4048-b840-38749e726579",
+				"IdentityPoolName": "reto4d5feb25e_identitypool_d5feb25e__dev",
+				"UserPoolName": "reto4d5feb25e_userpool_d5feb25e"
+			},
+			"lastPushDirHash": "biQjeagxO00GTGN9ijc4hLwq7cE="
+		}
+	},
+	"storage": {
+		"s38f236071": {
+			"service": "S3",
+			"providerPlugin": "awscloudformation",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/reto4-dev-20190921163029-deployment/amplify-cfn-templates/storage/s3-cloudformation-template.json",
+				"logicalId": "storages38f236071"
+			},
+			"lastPushTimeStamp": "2019-09-24T03:26:24.280Z",
+			"output": {
+				"BucketName": "reto426282917d98c46ebadb889980ce12f6e-dev",
+				"Region": "us-east-1"
+			},
+			"lastPushDirHash": "x+MhpE8uwWRfhEj4EYaYYLXiJKU="
+		}
+	},
+	"function": {
+		"reto41c526823": {
+			"service": "Lambda",
+			"providerPlugin": "awscloudformation",
+			"build": true,
+			"dependsOn": [
+				{
+					"category": "storage",
+					"resourceName": "s38f236071",
+					"attributes": [
+						"BucketName"
+					]
+				}
+			],
+			"lastBuildTimeStamp": "2019-09-22T23:48:01.735Z",
+			"lastPackageTimeStamp": "2019-09-24T03:25:17.346Z",
+			"distZipFilename": "reto41c526823-44725054785772427662-build.zip",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/reto4-dev-20190921163029-deployment/amplify-cfn-templates/function/reto41c526823-cloudformation-template.json",
+				"logicalId": "functionreto41c526823"
+			},
+			"lastPushTimeStamp": "2019-09-24T03:26:24.283Z",
+			"output": {
+				"Region": "us-east-1",
+				"Arn": "arn:aws:lambda:us-east-1:321531330041:function:reto41c526823-dev",
+				"Name": "reto41c526823-dev",
+				"LambdaExecutionRole": "reto4LambdaRolea3f5f025-dev"
+			},
+			"lastPushDirHash": "QyOVO22QF2bGFlWd9f0EAGILRS0="
+		}
+	},
+	"api": {
+		"apic20dc1ad": {
+			"service": "API Gateway",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [
+				{
+					"category": "function",
+					"resourceName": "reto41c526823",
+					"attributes": [
+						"Name",
+						"Arn"
+					]
+				}
+			],
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/reto4-dev-20190921163029-deployment/amplify-cfn-templates/api/apic20dc1ad-cloudformation-template.json",
+				"logicalId": "apiapic20dc1ad"
+			},
+			"lastPushTimeStamp": "2019-09-24T03:26:24.282Z",
+			"output": {
+				"ApiName": "apic20dc1ad",
+				"RootUrl": "https://pgx36wfkge.execute-api.us-east-1.amazonaws.com/dev"
+			},
+			"lastPushDirHash": "c4stxu0yoJViFl41Pv7p043+dz4="
+		}
+	}
+}

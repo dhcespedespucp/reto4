@@ -1,0 +1,271 @@
+{
+	"AWSTemplateFormatVersion": "2010-09-09",
+	"Description": "Lambda resource stack creation using Amplify CLI",
+	"Parameters": {
+		"env": {
+			"Type": "String"
+		},
+		"storages38f236071BucketName": {
+			"Type": "String",
+			"Default": "storages38f236071BucketName"
+		},
+		"functionreto41c526823Name": {
+			"Type": "String",
+			"Default": "functionreto41c526823Name"
+		},
+		"apiapic20dc1adApiName": {
+			"Type": "String",
+			"Default": "apiapic20dc1adApiName"
+		}
+	},
+	"Conditions": {
+		"ShouldNotCreateEnvResources": {
+			"Fn::Equals": [
+				{
+					"Ref": "env"
+				},
+				"NONE"
+			]
+		}
+	},
+	"Resources": {
+		"LambdaFunction": {
+			"Type": "AWS::Lambda::Function",
+			"Metadata": {
+				"aws:asset:path": "./src",
+				"aws:asset:property": "Code"
+			},
+			"Properties": {
+				"Handler": "index.handler",
+				"FunctionName": {
+					"Fn::If": [
+						"ShouldNotCreateEnvResources",
+						"reto41c526823",
+						{
+							"Fn::Join": [
+								"",
+								[
+									"reto41c526823",
+									"-",
+									{
+										"Ref": "env"
+									}
+								]
+							]
+						}
+					]
+				},
+				"Environment": {
+					"Variables": {
+						"ENV": {
+							"Ref": "env"
+						},
+						"REGION": {
+							"Ref": "AWS::Region"
+						},
+						"STORAGE_S38F236071_BUCKETNAME": {
+							"Ref": "storages38f236071BucketName"
+						},
+						"FUNCTION_RETO41C526823_NAME": {
+							"Ref": "functionreto41c526823Name"
+						},
+						"API_APIC20DC1AD_APINAME": {
+							"Ref": "apiapic20dc1adApiName"
+						}
+					}
+				},
+				"Role": {
+					"Fn::GetAtt": [
+						"LambdaExecutionRole",
+						"Arn"
+					]
+				},
+				"Runtime": "nodejs10.x",
+				"Timeout": "25",
+				"Code": {
+					"S3Bucket": "reto4-dev-20190921163029-deployment",
+					"S3Key": "amplify-builds/reto41c526823-44725054785772427662-build.zip"
+				}
+			}
+		},
+		"LambdaExecutionRole": {
+			"Type": "AWS::IAM::Role",
+			"Properties": {
+				"RoleName": {
+					"Fn::If": [
+						"ShouldNotCreateEnvResources",
+						"reto4LambdaRolea3f5f025",
+						{
+							"Fn::Join": [
+								"",
+								[
+									"reto4LambdaRolea3f5f025",
+									"-",
+									{
+										"Ref": "env"
+									}
+								]
+							]
+						}
+					]
+				},
+				"AssumeRolePolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Principal": {
+								"Service": [
+									"lambda.amazonaws.com"
+								]
+							},
+							"Action": [
+								"sts:AssumeRole"
+							]
+						}
+					]
+				}
+			}
+		},
+		"lambdaexecutionpolicy": {
+			"DependsOn": [
+				"LambdaExecutionRole"
+			],
+			"Type": "AWS::IAM::Policy",
+			"Properties": {
+				"PolicyName": "lambda-execution-policy",
+				"Roles": [
+					{
+						"Ref": "LambdaExecutionRole"
+					}
+				],
+				"PolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Action": [
+								"logs:CreateLogGroup",
+								"logs:CreateLogStream",
+								"logs:PutLogEvents"
+							],
+							"Resource": {
+								"Fn::Sub": [
+									"arn:aws:logs:${region}:${account}:log-group:/aws/lambda/${lambda}:log-stream:*",
+									{
+										"region": {
+											"Ref": "AWS::Region"
+										},
+										"account": {
+											"Ref": "AWS::AccountId"
+										},
+										"lambda": {
+											"Ref": "LambdaFunction"
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			}
+		},
+		"AmplifyResourcesPolicy": {
+			"DependsOn": [
+				"LambdaExecutionRole"
+			],
+			"Type": "AWS::IAM::Policy",
+			"Properties": {
+				"PolicyName": "amplify-lambda-execution-policy",
+				"Roles": [
+					{
+						"Ref": "LambdaExecutionRole"
+					}
+				],
+				"PolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Action": [
+								"s3:PutObject",
+								"s3:GetObject",
+								"s3:ListBucket",
+								"s3:DeleteObject"
+							],
+							"Resource": [
+								{
+									"Fn::Join": [
+										"",
+										[
+											"arn:aws:s3:::",
+											{
+												"Ref": "storages38f236071BucketName"
+											},
+											"/*"
+										]
+									]
+								}
+							]
+						},
+						{
+							"Effect": "Allow",
+							"Action": [
+								"apigateway:POST",
+								"apigateway:PUT",
+								"apigateway:GET",
+								"apigateway:HEAD",
+								"apigateway:OPTIONS",
+								"apigateway:PATCH",
+								"apigateway:DELETE"
+							],
+							"Resource": [
+								{
+									"Fn::Join": [
+										"",
+										[
+											"arn:aws:apigateway:",
+											{
+												"Ref": "AWS::Region"
+											},
+											"::/restapis/",
+											{
+												"Ref": "apiapic20dc1adApiName"
+											},
+											"/*"
+										]
+									]
+								}
+							]
+						}
+					]
+				}
+			}
+		}
+	},
+	"Outputs": {
+		"Name": {
+			"Value": {
+				"Ref": "LambdaFunction"
+			}
+		},
+		"Arn": {
+			"Value": {
+				"Fn::GetAtt": [
+					"LambdaFunction",
+					"Arn"
+				]
+			}
+		},
+		"Region": {
+			"Value": {
+				"Ref": "AWS::Region"
+			}
+		},
+		"LambdaExecutionRole": {
+			"Value": {
+				"Ref": "LambdaExecutionRole"
+			}
+		}
+	}
+}
